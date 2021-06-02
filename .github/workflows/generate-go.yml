@@ -13,18 +13,20 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: '1.15.x'
-      - name: Cache Golang Packages
-        uses: actions/cache@v1
+      - name: Github API Request
+        id: request
+        uses: octokit/request-action@v2.0.0
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-golang-generate${{ hashFiles('go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-golang-generate
-            ${{ runner.os }}-golang-
-      - name: checkout
+          route: ${{ github.event.issue.pull_request.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout PR Branch
         uses: actions/checkout@v2
-      - run: mkdir cmd
-      - run: touch cmd/sonarExecuteScan_generated.go
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
+          ref: ${{ steps.pr_data.outputs.branch }}
+      - run: touch cmd/checkmarxExecuteScan_generated.go
       - run: git diff --name-only
       - name: git commit
         run: |

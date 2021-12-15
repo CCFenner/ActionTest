@@ -26,12 +26,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
           ref: ${{ steps.pr_data.outputs.branch }}
+      - run: mkdir cmd || exit 0
       - run: touch cmd/checkmarxExecuteScan_generated.go
       - run: git diff --name-only
-      - name: git commit
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add cmd/*_generated.go
-          git commit -m "update generated sources"
-          git push
+             - name: push
+         uses: github-actions-x/commit@v2.8
+         with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
+           push-branch: 'master'
+           files: cmd/*_generated.go
+           commit-message: 'chore: update generated sources'
+           name: 'github-actions[bot]'
+           email: 'github-actions[bot]@users.noreply.github.com'
+           
+#      - name: git commit
+#        run: |
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          git add cmd/*_generated.go
+#          git commit -m "update generated sources"
+#          git push

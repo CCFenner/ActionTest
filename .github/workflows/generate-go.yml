@@ -29,15 +29,15 @@ jobs:
       - run: mkdir cmd || exit 0
       - run: touch cmd/checkmarxExecuteScan_generated.go
       - run: git diff --name-only
-             - name: push
-         uses: github-actions-x/commit@v2.8
-         with:
-           github-token: ${{ secrets.GITHUB_TOKEN }}
-           push-branch: 'master'
-           files: cmd/*_generated.go
-           commit-message: 'chore: update generated sources'
-           name: 'github-actions[bot]'
-           email: 'github-actions[bot]@users.noreply.github.com'
+      - name: push
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'master'
+          files: cmd/*_generated.go
+          commit-message: 'chore: update generated sources'
+          name: 'github-actions[bot]'
+          email: 'github-actions[bot]@users.noreply.github.com'
            
 #      - name: git commit
 #        run: |

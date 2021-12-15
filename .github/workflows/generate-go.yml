@@ -27,7 +27,7 @@ jobs:
           repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
           ref: ${{ steps.pr_data.outputs.branch }}
       - run: mkdir cmd || exit 0
-      - run: touch cmd/checkmarxExecuteScan_generated.go
+      - run: touch cmd/fortifyExecuteScan_generated.go
       - run: git diff --name-only
       - name: push
         uses: github-actions-x/commit@v2.8

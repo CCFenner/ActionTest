@@ -28,12 +28,12 @@ jobs:
           ref: ${{ steps.pr_data.outputs.branch }}
       - run: mkdir cmd || exit 0
       - run: touch cmd/fortifyExecuteScan_generated.go
-      - run: git diff --name-only
+      - run: git status --short
       - name: push
         uses: github-actions-x/commit@v2.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'master'
+          push-branch: ${{ steps.pr_data.outputs.branch }}
           files: cmd/*_generated.go
           commit-message: 'chore: update generated sources'
           name: 'github-actions[bot]'
